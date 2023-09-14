@@ -31,6 +31,7 @@ if ~exist('db_tc','var')
     rms_tc = 0.10; % Sampling Rate
 end
 
+%if NaN, no noise.
 if ~exist('db_drop_eqex','var')
     db_drop_eqex = 10;
 end
@@ -80,17 +81,20 @@ tc_filt = filtfilt(b,a,tc);
 tc_filt = rms_tc*tc_filt/rms(tc_filt);
 tc_filt = stimGen.rampsound(tc_filt,fs,ramp);
 
-%bandwidth = ~0 Hz -> harmonic rank, fc should be half that.
-bw = f_low-1; %has to be 1 fft bin greater than 0 Hz, right?
-fcenter = .5*f_low;
-
-noise = stimGen.makeEqExNoiseFFT(bw,fcenter,dur,fs,ramp);
-
+x = tc_filt;
 %set rms of noise to be 
-rms_noise = db2mag(mag2db(rms_tc)-db_drop_eqex);
-noise = rms_noise*noise/rms(noise);
+if ~isnan(db_drop_eqex)
+    %bandwidth = ~0 Hz -> harmonic rank, fc should be half that.
+    bw = f_low-1; %has to be 1 fft bin greater than 0 Hz, right?
+    fcenter = .5*f_low;
+    noise = stimGen.makeEqExNoiseFFT(bw,fcenter,dur,fs,ramp);
+    rms_noise = db2mag(mag2db(rms_tc)-db_drop_eqex);
+    noise = rms_noise*noise/rms(noise);
 
-x = noise'+tc_filt;
+    x = noise'+x;
+end
+
+
 
 end
 
