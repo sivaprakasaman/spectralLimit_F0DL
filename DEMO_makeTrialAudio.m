@@ -9,19 +9,19 @@ rng(s);
 
 Nfiles = 6; % Number of files per parameter level
 minparam = 1;
-maxparam = 50;
+maxparam = 20;
 params = minparam:maxparam;
-m = logspace(log10(.15), log10(20), numel(params)); %F0DL to test
+m = logspace(log10(15), log10(20), numel(params)); %F0DL to test
 dur = 0.4;
 isi = .25;
 fs = 48828.125;
 sigrms = 0.020;
 ramp = 0.02;
-db_drop_eqex = 10;
-ranks = [2];
+db_drop_eqex = NaN;
+ranks = [4];
 nharms_total = 20;
 nharms_pass = 4;
-f0 = 223;
+f0 = 103;
 dirs = [-1,1];
 
 %Alt phase
@@ -31,8 +31,8 @@ phi = phi + pi/4; % offset needed to ensure stim starts at zero during alt phase
 
 ind = 0;
 
-if ~exist('trialaudio','dir')
-    mkdir('trialaudio');
+if ~exist('DEMO_trialaudio','dir')
+    mkdir('DEMO_trialaudio');
 end
 
 for r = 1:length(ranks)
@@ -66,7 +66,7 @@ for r = 1:length(ranks)
                     y = [dummy, dummy, sig];
             end
 
-            fname = strcat('./trialaudio/trial',num2str(param),...
+            fname = strcat('./DEMO/trialaudio/trial',num2str(param),...
                 '_',num2str(rank),'_', num2str(nf), '.mat');
             save(fname, 'y', 'fs', 'difLimen','sigrms', 'direction','rank','phi','nharms_total','nharms_pass','db_drop_eqex', 'param', 'answer');
             

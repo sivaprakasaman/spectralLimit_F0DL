@@ -21,7 +21,7 @@ db_drop_eqex = 10;
 ranks = 2:2:12;
 nharms_total = 20;
 nharms_pass = 4;
-f0 = 223;
+f0 = 103;
 dirs = [-1,1];
 
 %Alt phase

@@ -6,8 +6,7 @@ if(~exist(strcat(paraDir,'/',subj),'dir'))
 end
 useTDT = false;
 
-% rankList = 2:2:12;
-rankList = [2];
+rankList = [4];
 
 %1 for left, 2 for right, 3 for both
 ear = 2;
