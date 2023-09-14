@@ -78,13 +78,13 @@ tc_filt = filtfilt(b,a,tc);
 %Scale to rms_tc...should the full 20 tone complex be scaled or the
 %passband? I think after filtering is better
 tc_filt = rms_tc*tc_filt/rms(tc_filt);
-tc_filt = rampsound(tc_filt,fs,ramp);
+tc_filt = stimGen.rampsound(tc_filt,fs,ramp);
 
 %bandwidth = ~0 Hz -> harmonic rank, fc should be half that.
 bw = f_low-1; %has to be 1 fft bin greater than 0 Hz, right?
 fcenter = .5*f_low;
 
-noise = makeEqExNoiseFFT(bw,fcenter,dur,fs,ramp);
+noise = stimGen.makeEqExNoiseFFT(bw,fcenter,dur,fs,ramp);
 
 %set rms of noise to be 
 rms_noise = db2mag(mag2db(rms_tc)-db_drop_eqex);

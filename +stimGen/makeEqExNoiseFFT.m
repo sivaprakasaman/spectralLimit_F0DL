@@ -59,7 +59,7 @@ noiseF((end-hmax+1):(end-hmin+1)) = exp(-1*1j*phase) .* mag(end:-1:1);
 
 
 noise = ifft(noiseF,'symmetric');
-noise = rampsound(noise,fs,rampSize);
+noise = stimGen.rampsound(noise,fs,rampSize);
 noiserms = rms(noise);
 noise = (noise/noiserms) * 0.1;
 
