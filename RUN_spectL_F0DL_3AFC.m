@@ -8,7 +8,7 @@ end
 useTDT = false;
 randomize = true;
 rankList = 2:2:12;
-rankList = [12];
+rankList = [4,12];
 
 if(randomize)
     rankList = rankList(randperm(length(rankList)));
