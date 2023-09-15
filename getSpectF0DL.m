@@ -45,7 +45,7 @@ Nfft = max([256 2^(floor(log2(Nwindow))+1)]);
 [Sgram,SG_Freq_Hz,SG_Time_sec] = spectrogram(sig,Nwindow,Noverlap,Nfft,Fs); 
 
 nfft_spect = max([2048, 2^(floor(log2(length(sig))+1))]);
-% [DFTsig, DFTfreq_Hz, dataStruct, ~] = stimGen.compute_dft(sig,Fs,[],[],nfft_spect,spectType);
+[DFTsig, DFTfreq_Hz, dataStruct, ~] = compute_dft(sig,Fs,[],[],nfft_spect,spectType);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
