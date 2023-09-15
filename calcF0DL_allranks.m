@@ -1,31 +1,48 @@
 %Calculate F0DL% as the Geometric mean at the last 6 reverals
-%TODO:
+%TODO: 
 % - Make sure sorted by time!!!!
 % - Allow for 2nd set of trials to be discarded
 % - How many reversals by Hari? Should we use geometric mean?
 % - Clean up the code some point
 % - figure out what data to export
 
-clear
+clear 
 close all
 
 cwd = pwd;
 warning('off');
 
 addpath(pwd)
-subj = 'test';
-% local = 0;
+% datapath = '../../../../Data/F0DL/SNAPLab/Pilot/subjResponses/';
+%can automate this later
+condition = 'YNH';
+subj = 'S161';
+% dirs = ["VMA_RightEar"];
+local = 0;
 plot_on = 1;
-discard_n = 0; %discard n rounds of trials
-range_F0DL = [.25,20];
+discard_n = 0;
 increm = 40;
+range_F0DL = [.25,30];
 ytik = logspace(log10(range_F0DL(1)), log10(range_F0DL(2)), increm); %F0DL to test
 ytik = ytik(1:9:end);
 ytik = round(ytik,2);
 ylabs = num2str(ytik);
 
-datapath = ['Results/',subj];
+if ispc && ~local
+    %figure out what's best later
+    prefix = 'A:/Pitch_Study/Data/';
+elseif ~local
+    [~,uname] = unix('whoami');
+    uname = uname(1:end-1);
+    prefix = ['/media/',uname,'/AndrewNVME/Pitch_Study/Pitch_Diagnostics_SH_AS/F0DL/Human/'];
+else
+    prefix = '../../../../Data/';
+end 
+
+suffix = [condition,'/',subj];
+datapath = [prefix,suffix];
 cd(datapath)
+
 
 files = {dir(fullfile(cd,'*.mat')).name};
 [~,ind] = sort({dir(fullfile(cd,'*.mat')).date});
@@ -56,8 +73,8 @@ for j = 1:nfiles
 
         responses = responseList(:,5);
 
-        mn1 = getReversalsF0DL_AMAJO(responses,0);
-        [mn2, std2] = getReversalsF0DL_Hari(responseList,range_F0DL,increm,0);
+        mn1 = analysis.getReversalsF0DL_AMAJO(responses,0);
+        [mn2, std2] = analysis.getReversalsF0DL_Hari(responseList,range_F0DL,increm,0);
 
         conf2 = 1.96*std2;
 
@@ -74,7 +91,7 @@ for j = 1:nfiles
             figure(f0DL_fig);
             subplot(2,4,rank/2)
             hold on
-            plot(responses*100,'linewidth',2,'color',[clr_resp, tcount(rank)*.3]);
+            plot(responses,'linewidth',2,'color',[clr_resp, tcount(rank)*.3]);
             plot(mn1_lin,'color',clr_amajo);
             plot(mn2_lin,'color',clr_hari);
             title(['Rank = ',num2str(rank+.5)]); %add .5 because of roving
@@ -82,8 +99,8 @@ for j = 1:nfiles
             yticks(ytik);
             yticklabels(ytik);
             set(gca,'yscale','log')
-            grid on
             box on
+            grid on
             if rank == 12
                 legend('Run 1','','','Run 2','Location','SouthEast')
             end
@@ -101,13 +118,12 @@ output_geo(:,1) = B;
 output_hari(:,2) = output_hari(I,2);
 output_hari(:,1) = B;
 
-
 %% Calculate estimated psychometric function for mean of runs
 
 %consolidate runs
-means_geo = squeezeMean(output_geo);
+means_geo = analysis.squeezeMean(output_geo);
 means_geo = means_geo(:,1:2);
-means_hari = squeezeMean(output_hari);
+means_hari = analysis.squeezeMean(output_hari);
 means_hari = means_hari(:,1:2);
 ranks = unique(means_geo(:,1))+0.5;
 xtik = ranks;
@@ -149,6 +165,7 @@ if plot_on
     title('Sigmoidal Fit','FontWeight','bold');
     xlabel('Harmonic Rank','FontWeight','bold');
     ylabel('F0DL (%)','FontWeight','bold');
+    grid on
 
     sgtitle(['Subject: ', subj]);
     set(f0DL_fig,'Position',[575 354 1123 611]);
@@ -160,16 +177,13 @@ if plot_on
     set(findall(gcf,'-property','FontSize'),'FontSize',12)
 end
 
-%
-% if ~exist('../Processed','dir')
-%     mkdir('../Processed');
-% end
+% 
+if ~exist('Processed','dir')
+    mkdir('Processed');
+end
 
-% cd('../Processed')
-% fname = strcat("PROCESSED_",dirs(i),".mat");
-% save(fname,'output')
-% clear output
-% cd ../
-
-
+cd('Processed')
+fname = strcat(subj,'_F0DL_Processed.mat');
+save(fname,'means_geo','means_hari','output_geo','output_hari','x','sig_model_geo','sig_model_hari')
+print([subj,'_F0DL_compiled.png'],'-dpng','-r300')
 cd(cwd)
