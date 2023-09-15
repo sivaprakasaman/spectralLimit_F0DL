@@ -66,7 +66,7 @@ for r = 1:length(ranks)
                     y = [dummy, dummy, sig];
             end
 
-            fname = strcat('./DEMO/trialaudio/trial',num2str(param),...
+            fname = strcat('./DEMO_trialaudio/trial',num2str(param),...
                 '_',num2str(rank),'_', num2str(nf), '.mat');
             save(fname, 'y', 'fs', 'difLimen','sigrms', 'direction','rank','phi','nharms_total','nharms_pass','db_drop_eqex', 'param', 'answer');
             
