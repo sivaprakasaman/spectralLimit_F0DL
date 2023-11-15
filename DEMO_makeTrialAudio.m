@@ -1,4 +1,4 @@
-clear;
+sclear;
 clc;
 
 %% Seed rng

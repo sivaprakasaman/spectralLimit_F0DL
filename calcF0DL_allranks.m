@@ -16,7 +16,7 @@ addpath(pwd)
 % datapath = '../../../../Data/F0DL/SNAPLab/Pilot/subjResponses/';
 %can automate this later
 condition = 'YNH';
-subj = 'S161';
+subj = 'S311';
 % dirs = ["VMA_RightEar"];
 local = 0;
 plot_on = 1;
