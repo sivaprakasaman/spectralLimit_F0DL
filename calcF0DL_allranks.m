@@ -15,14 +15,14 @@ warning('off');
 addpath(pwd)
 % datapath = '../../../../Data/F0DL/SNAPLab/Pilot/subjResponses/';
 %can automate this later
-condition = 'YNH';
-subj = 'S311';
+condition = 'MANH';
+subj = 'S380';
 % dirs = ["VMA_RightEar"];
 local = 0;
 plot_on = 1;
 discard_n = 0;
-increm = 40;
-range_F0DL = [.25,30];
+increm = 50;
+range_F0DL = [.15,30];
 ytik = logspace(log10(range_F0DL(1)), log10(range_F0DL(2)), increm); %F0DL to test
 ytik = ytik(1:9:end);
 ytik = round(ytik,2);
@@ -41,7 +41,7 @@ end
 
 suffix = [condition,'/',subj];
 datapath = [prefix,suffix];
-cd(datapath)
+cd([datapath,'/Raw/'])
 
 
 files = {dir(fullfile(cd,'*.mat')).name};
@@ -178,6 +178,7 @@ if plot_on
 end
 
 % 
+cd(datapath)
 if ~exist('Processed','dir')
     mkdir('Processed');
 end
