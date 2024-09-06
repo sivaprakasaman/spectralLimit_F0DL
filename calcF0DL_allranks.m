@@ -15,8 +15,11 @@ warning('off');
 addpath(pwd)
 % datapath = '../../../../Data/F0DL/SNAPLab/Pilot/subjResponses/';
 %can automate this later
+
 condition = 'MANH';
 subj = 'S380';
+
+
 % dirs = ["VMA_RightEar"];
 local = 0;
 plot_on = 1;
@@ -118,13 +121,19 @@ output_geo(:,1) = B;
 output_hari(:,2) = output_hari(I,2);
 output_hari(:,1) = B;
 
+%%
+output_geo(:,2) = output_geo(:,2);
+output_hari(:,2) = output_hari(:,2);
+
 %% Calculate estimated psychometric function for mean of runs
 
 %consolidate runs
-means_geo = analysis.squeezeMean(output_geo);
+means_geo = analysis.squeezeMean(output_geo,1);
 means_geo = means_geo(:,1:2);
-means_hari = analysis.squeezeMean(output_hari);
+means_geo(:,2) = 10.^means_geo(:,2);
+means_hari = analysis.squeezeMean(output_hari,1);
 means_hari = means_hari(:,1:2);
+means_hari(:,2) = 10.^means_hari(:,2);
 ranks = unique(means_geo(:,1))+0.5;
 xtik = ranks;
 
